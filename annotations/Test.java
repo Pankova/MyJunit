@@ -6,7 +6,9 @@ import java.lang.annotation.*;
 public @interface Test
 {
 	Class<? extends Throwable> expected() default Null.class;
+
+	class Null extends Throwable{ }
+
 }
 
-class Null extends Throwable{ }
 
