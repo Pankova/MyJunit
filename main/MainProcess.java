@@ -1,17 +1,16 @@
 package MyJunit.main;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.Vector;
 
 public class MainProcess
 {
+	public static Vector<String> queueOfTests = new Vector<>();
+
 	public static void main(String [] data)
 	{
 		int ability = Runtime.getRuntime().availableProcessors();
 		int threadsCount = 0;
 
-		List<String> queueOfTests = new ArrayList<>();
 
 		try
 		{   if(data[0].matches("\\d+"))
@@ -33,58 +32,42 @@ public class MainProcess
 			return;
 		}
 
-		Analyzer[] threads = new Analyzer[threadsCount];
-
-
+		TestThread[] threadsList = new TestThread[threadsCount];
+		for(int i = 0; i < threadsCount; i++)
+		{
+			threadsList[i] = new TestThread();
+			threadsList[i].start();
+		}
 
 		for(int i = 1; i < data.length; i++)
 			queueOfTests.add(data[i]);
 
-
-
-		for(int i = 0; i < queueOfTests.size(); i++)
+		try
 		{
-			for(int j = 0; j < threads.length; j++)
+			while (!queueOfTests.isEmpty())
 			{
-				try
+				Thread.sleep(300);
+			}
+
+			for(TestThread thread : threadsList)
+			{
+				thread.interrupt();
+			}
+
+			for(int i = 0; i < threadsList.length; i++)
+			{
+				if (threadsList[i].isAlive())
 				{
-					Class testClass = Class.forName(queueOfTests.get(i));
-					threads[j] = new Analyzer(testClass);
-					//Analyzer thread = new Analyzer(testClass);
-					i++;
-					try
-					{
-						threads[j].start();
-						//thread.start();
-					}
-					catch(Throwable e)
-					{
-						e.printStackTrace();
-					}
-				}
-				catch(ClassNotFoundException e)
-				{
-					e.printStackTrace();
+					i--;
+					Thread.sleep(300);
 				}
 			}
+
 		}
-
-
-		for(Analyzer thread : threads)
+		catch(InterruptedException e)
 		{
-			while (thread.isAlive())
-			{
-				try
-				{
-					Thread.sleep(500);
-				}
-				catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
-			}
+			e.printStackTrace();
 		}
-
 
 	}
 }

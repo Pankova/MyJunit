@@ -8,23 +8,16 @@ import MyJunit.annotations.After;
 import MyJunit.annotations.Before;
 import MyJunit.annotations.Test;
 
-class Analyzer extends Thread
+class Analyzer
 {
-	private Class clazz;
+	private final Class clazz;
+	private final long id;
 
-	Analyzer(Class testClass){ clazz = testClass; }
-
-	@Override
-	public void run()
-	{
-		try
-		{
-			parse();
-		}catch(Exception e)
-		{
-			e.printStackTrace();
-		}
+	Analyzer(Class testClass, long testId){
+		clazz = testClass;
+		id = testId;
 	}
+
 
 	public void parse() throws Exception
 	{
@@ -92,6 +85,11 @@ class Analyzer extends Thread
 						 "- Failed: " + fail + "\n");
 
 		testWriter.flush();
+	}
+
+	private long getId()
+	{
+		return id;
 	}
 
 	private void nothing(){}
