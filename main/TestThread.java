@@ -22,6 +22,10 @@ public class TestThread extends Thread
 			{
 				// попали в момент, когда очередь пустая, но main еще, вероятно, положит туда чего-нибудь
 			}
+			catch (ClassNotFoundException e)
+			{
+				System.out.println("Test class is not found");
+			}
 			catch(Exception e)
 			{
 				e.printStackTrace();

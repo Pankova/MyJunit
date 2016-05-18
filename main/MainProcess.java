@@ -13,24 +13,21 @@ public class MainProcess
 
 
 		try
-		{   if(data[0].matches("\\d+"))
-				threadsCount = Integer.parseInt(data[0]);
-			else
-			{
-				System.out.println("Incorrect number of threads");
-				return;
-			}
+		{
+			threadsCount = Integer.parseInt(data[0]);
 		}
 		catch(NumberFormatException e)
 		{
-			e.printStackTrace();
+			System.out.println("Incorrect number of threads");
 		}
+
 
 		if (threadsCount > ability)
 		{
 			System.out.println("The ability of processor less, than you think. Please, change the count of threads.");
 			return;
 		}
+
 
 		TestThread[] threadsList = new TestThread[threadsCount];
 		for(int i = 0; i < threadsCount; i++)
@@ -66,6 +63,7 @@ public class MainProcess
 		}
 		catch(InterruptedException e)
 		{
+			//any thread has interrupted the current thread
 			e.printStackTrace();
 		}
 
